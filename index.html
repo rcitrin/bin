@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>8-Bit Lightbulbs</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #eee;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 40px 0;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    .bulb-container {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .bulb-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bulb {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: #222;
+      box-shadow: inset 0 0 15px #000;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .bulb.on {
+      background: radial-gradient(circle at 30% 30%, #ffef6b, #ffd000);
+      box-shadow: 0 0 25px 8px #ffea61;
+      transform: scale(1.05);
+    }
+
+    .value {
+      font-size: 0.9em;
+      color: #aaa;
+      user-select: none;
+    }
+
+    .output {
+      margin-top: 30px;
+      font-size: 1.3em;
+    }
+
+    #binary {
+      font-family: "Courier New", monospace;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>8-Bit Lightbulb Simulator</h1>
+  <div class="bulb-container" id="bulbs"></div>
+
+  <div class="output">
+    <div id="binary">Binary: 00000000</div>
+    <div id="decimal">Decimal: 0</div>
+  </div>
+
+  <script>
+    const bulbsContainer = document.getElementById('bulbs');
+    const binaryDisplay = document.getElementById('binary');
+    const decimalDisplay = document.getElementById('decimal');
+
+    const powers = [128, 64, 32, 16, 8, 4, 2, 1];
+    let bits = Array(8).fill(0);
+
+    function updateDisplays() {
+      const binaryStr = bits.join('');
+      const decimalValue = parseInt(binaryStr, 2);
+      binaryDisplay.textContent = `Binary: ${binaryStr}`;
+      decimalDisplay.textContent = `Decimal: ${decimalValue}`;
+    }
+
+    powers.forEach((power, i) => {
+      const col = document.createElement('div');
+      col.className = 'bulb-column';
+
+      const bulb = document.createElement('div');
+      bulb.className = 'bulb';
+
+      bulb.addEventListener('click', () => {
+        bits[i] = bits[i] ? 0 : 1;
+        bulb.classList.toggle('on');
+        updateDisplays();
+      });
+
+      const label = document.createElement('div');
+      label.className = 'value';
+      label.textContent = power;
+
+      col.appendChild(bulb);
+      col.appendChild(label);
+      bulbsContainer.appendChild(col);
+    });
+
+    updateDisplays();
+  </script>
+</body>
+</html>
